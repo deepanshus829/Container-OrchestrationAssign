@@ -19,21 +19,29 @@ spec:
           image: container-orchestrationassign-frontend-green:latest
           imagePullPolicy: Never
           ports:
-            - containerPort: 3200
+            - name: http
+              containerPort: 3200
+          resources:
+            requests:
+              cpu: "50m"
+              memory: "64Mi"
+            limits:
+              cpu: "100m"
+              memory: "128Mi"
           env:
-            - name: PORT
+            - name: http
               value: "3200"
           readinessProbe:
             httpGet:
               path: /health
-              port: 3200
+              port: http
             initialDelaySeconds: 5
             periodSeconds: 5
             timeoutSeconds: 5
           livenessProbe:
             httpGet:
               path: /health
-              port: 3200
+              port: http
             initialDelaySeconds: 10
             periodSeconds: 10
             timeoutSeconds: 5

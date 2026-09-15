@@ -19,21 +19,29 @@ spec:
           image: container-orchestrationassign-frontend-blue:latest
           imagePullPolicy: Never
           ports:
-            - containerPort: 3100
+            - name: http
+              containerPort: 3100
+          resources:
+            requests:
+              cpu: "50m"
+              memory: "64Mi"
+            limits:
+              cpu: "100m"
+              memory: "128Mi"
           env:
-            - name: PORT
+            - name: http
               value: "3100"
           readinessProbe:
             httpGet:
               path: /health
-              port: 3100
+              port: http
             initialDelaySeconds: 5
             periodSeconds: 5
             timeoutSeconds: 5
           livenessProbe:
             httpGet:
               path: /health
-              port: 3100
+              port: http
             initialDelaySeconds: 10
             periodSeconds: 10
             timeoutSeconds: 5
@@ -47,6 +55,7 @@ spec:
     app: frontend
     version: blue
   ports:
-    - port: 3100
-      targetPort: 3100
+    - name: http
+      port: 3100
+      targetPort: http
   type: NodePort
